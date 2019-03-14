@@ -1,0 +1,161 @@
+'use strict'; 
+app.controller('MarketingReportDetailsCtrl', function($scope, $http, $state, $timeout, MCashService, $location, $stateParams, MarketingReportConfig) { 
+	
+	$scope.reportId = $stateParams.id; 
+	
+	$scope.reportId = $stateParams.id;
+	$scope.csvurl = contextPath + '/ajx/marketing/report/export/csv?id=' + $scope.reportId; 
+	
+	$scope.isLoading = false;
+	$scope.dataLoading = false;
+	$scope.rowCollection = [];
+	$scope.response = {}; 
+	$scope.response.error = '';
+	$scope.isError = false;
+	$scope.pageError = false;
+	$scope.displayed = {};
+	$scope.displayed.Collection = [];
+	$scope.paginationShow = false;
+	var totalData = 0;
+	$scope.paginationOption = [ 10, 25, 50, 100 ];
+	$scope.filteredItems = [];
+	$scope.isPagination = true; 
+	$scope.showrecords = 10;
+	$scope.start = 0;
+	$scope.to = $scope.showrecords;
+	$scope.itemsByPage = 50;
+	var handleSuccess = function(data) {
+		if (data.status == 'SUCCESS') {
+			console.log(data);
+			$scope.measures = data.response.measures.measures;
+			$scope.dataLoading = false;
+		} else if (data.status == 'FAILED') {
+			$scope.errorPage = true;
+			$scope.errorMsg = data.errorDetails;
+		} else {
+			$scope.pageError = true;
+			$scope.page = {
+				title : 'Error Page',
+			};
+			$scope.responseError = data.errorDetails;
+		}
+	};
+	MarketingReportConfig.getMarketingReportConfig().success(handleSuccess);
+
+	if (MCashService.get("showrecords" + $location.path()) != undefined) {
+		$scope.showrecords = MCashService.get("showrecords" + $location.path());
+	} else {
+		$scope.showrecords = $scope.showrecords;
+	} 
+
+	$scope.dataChange = function(showrecords) {
+		MCashService.setMycache('showrecords' + $location.path(), showrecords);
+	}
+
+	$scope.callServer = function() { 
+		$scope.isLoading = true; 
+		var responsePromise = $http.get(contextPath + '/ajx/marketing/report/details/by/id' + "?id=" + $scope.reportId);
+		responsePromise.success(function(data) { 
+			if (data.status == 'SUCCESS') { 
+				$scope.rowCollection = data.rows;
+				$scope.total = $scope.rowCollection.length;
+				totalData = $scope.rowCollection.length;
+				if (totalData <= 10) {
+					$scope.paginationShow = false;
+				} else {
+					$scope.paginationShow = true; 
+				}
+				$scope.headerCollection = data.columns;
+				if (totalData == 0) {
+					$scope.isError = true;
+					$scope.isPagination = false;
+					$scope.response.error = data.errorDetails;
+				} else {
+					$scope.isError = false;
+					$scope.response.error = data.errorDetails;
+				}
+				$scope.tableHead = [].concat($scope.headerCollection);
+				if ($scope.rowCollection.length != 0) {
+					$scope.displayed.Collection = [].concat($scope.rowCollection);
+					for ( var i in $scope.displayed.Collection) {
+						for ( var j in $scope.displayed.Collection[i]) {
+							$scope.displayed.Collection[i][j] = $scope
+									.convertToNumIfPossible($scope.displayed.Collection[i][j]);
+						}
+					}
+				} else
+					$scope.response.error = data.successMsg;
+				$scope.isLoading = false;
+				$scope.isLoadingImage = false;
+				$scope.dataLoading = false;
+			} else { 
+				$scope.pageError = true;
+				$scope.page = {
+					title : 'Error Page',
+				};
+				$scope.response.error = data.errorDetails;
+			}
+			$scope.dataLoading = false;
+			$scope.isLoading = false;
+		})
+	};
+
+	$scope.convertToNumIfPossible = function(value) {
+		if (!isNaN(Number(value)))
+			return Number(value);
+		else
+			return value;
+	};
+
+	$scope.pageChanged = function(idx) {
+		$scope.to = idx * $scope.showrecords;
+		$scope.start = (idx * $scope.showrecords) - $scope.showrecords;
+		if ($scope.to >= totalData)
+			$scope.to = totalData;
+	}
+
+	$scope.showData = function(selecteditem) {
+		$scope.showrecords = selecteditem;
+		if ($scope.showrecords >= totalData)
+			$scope.isLoading = true;
+		$scope.to = $scope.showrecords;
+		$scope.isLoading = false;
+	}
+	$scope.reverse = false;
+	$scope.sortColumn = function(col) {
+		$scope.column = col + "";
+		if ($scope.reverse) {
+			$scope.reverse = false;
+		} else {
+			$scope.reverse = true;
+		}
+	};
+
+	$scope.$watch(function(queryTitle) {
+		// $scope.response.error = "";
+		$scope.isPagination = true;
+		// if ($scope.filteredItems.length == 0) {
+		// $scope.isError = true;
+		// }
+
+		if ($scope.rowCollection.length >= $scope.filteredItems.length) {
+			$scope.total = $scope.filteredItems.length;
+			$scope.to = $scope.displayed.Collection.length + $scope.start;
+		}
+	})
+	
+	$scope.printReportDetails = function(type) {
+		if (type == 'PRINT') {
+			document.getElementById('printMarketingReport').onclick();
+		} else {
+			document.getElementById('exportCSVMarketingReport').click();
+		}
+	}
+	
+	/*$scope.downloadCsvFile = function () {
+		$scope.isLoading = true; 
+		 document.location.href=contextPath + '/ajx/marketing/report/export/csv?id='+ $scope.reportId;
+     }*/
+})
+
+
