@@ -1,2 +1,117 @@
 
+//csv export of data in html 
+
+<script>
+	function printData() {
+		var divToPrint = document.getElementById('printTable');
+		var htmlToPrint = ''
+				+ '<style type="text/css">'
+				+ 'table { font-family: arial, sans-serif;border-collapse: collapse;width: 100%;} td, th { border: 1px solid #dddddd;text-align: left;padding: 8px;} tr:nth-child(even) { background-color: #dddddd;}'
+				+ '</style>';
+		htmlToPrint += divToPrint.outerHTML;
+		newWin = window.open("");
+		newWin.document
+				.write('<html><head><title>Report Details</title></head>');
+		newWin.document.write(htmlToPrint);
+		newWin.print();
+		newWin.close();
+	}
+</script>
+<div ng-controller="MarketingReportDetailsCtrl" ng-init="callServer()">
+	<div ng-show="dataLoading" class="text-center">
+		<div id="loading-overlay" class="ajax-page-loader">
+			<span class="loading-page-indicator col-md-6"> </span>
+		</div>
+	</div>
+	<div ng-show="!dataLoading">
+		<div class="pagecontent" ng-hide="pageError">
+			<div class="pull-left">
+				<a class="btn btn-default"
+					ui-sref='app.marketings.update({id:reportId})'><span
+					class="ng-scope">Edit Marketing Report</span> </a>
+			</div>
+			<div class="row" st-table="displayedCollection"
+				st-safe-src="rowCollection">
+				<div class="col-sm-12 col-lg-12 col-md-12">
+					<div class="pull-right">
+						<button type="button" id="printMarketingReport" onclick="printData()"
+							hidden="hidden">Print</button>
+						<a href="{{csvurl}}">
+							<button type="button" id="exportCSVMarketingReport" hidden="hidden">Export
+								CSV</button>
+						</a>
+						<button type="button" class="btn btn-default"
+							ng-controller="modelCtrl"
+							ng-click="openMarketingReportOtpPupUp('Verify and Print Marketing Report Details','PRINT')">Print</button>
+						<button type="button" class="btn btn-default"
+							ng-controller="modelCtrl"
+							ng-click="openMarketingReportOtpPupUp('Verify and Export CSV Marketing Report Details','EXPORT_CSV')">Export
+							CSV</button>
+					</div>
+					<!-- <div class="pull-right"> 
+						<button type="button" class="btn btn-default"
+						 id="printReport" onclick="printData()">Print</button>
+					</div> 
+					<div class="pull-right"> 
+						<button type="button" class="btn btn-default"
+							ng-click="downloadCsvFile()">Export CSV</button> 
+					</div>  -->
+				</div>
+				<div class="col-xs-12 m-t-20 row m-l-zero">
+					<div class="col-xs-12 list-page-content" style="background: white">
+						<section class="tile" fullscreen="isFullscreen03">
+							<div class="tile-body">
+								<table id="printTable" st-safe-src="rowCollection"
+									search-watch-model="query" class="st-table table table-custom">
+									<thead>
+										<tr>
+											<th ng-repeat="row in tableHead track by $index"
+												ng-click="sortColumn($index)" st-select-row="row"
+												st-sort="{{$index}}" class="sorting text-center">{{row}}</th>
+											<th class=" text-center handhover" ng-click="callServer()"><i
+												class="fa fa-refresh"></i></th>
+										</tr>
+									</thead>
+									<tbody ng-hide="isLoading">
+										<tr st-select-row="row"
+											ng-repeat="key in displayed.Collection |orderBy:column:reverse">
+											<td ng-repeat="row in key track by $index"
+												class="text-center">{{row}}</td>
+											<td></td>
+										</tr>
+										<tr st-select-row="row"
+											data-ng-repeat="key in (filteredItems = (rowCollection| filter:query)).slice(begin, end)">
+										</tr>
+									</tbody>
+									<tbody ng-show="isLoading">
+										<tr>
+											<td colspan="12" class="text-center"><div
+													class="loading-indicator"></div></td>
+										</tr>
+									</tbody>
+								</table>
+								<div class="row" ng-show="isError">
+									<br>
+									<div colspan="12" style="text-align: center;">
+										{{response.error}}</div>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class='pagecontent' ng-hide="!pageError">
+			<section class="tile" fullscreen="isFullscreen03">
+				<div class='text-center'>
+					<i class="fa fa-exclamation-triangle fa-4x m-t-sm"></i>
+					<h2 class="m-t-z">{{response.error}}</h2>
+					<div class="p-b-xs">
+						<a ui-sref="app.dashboard.home">Go To Home</a>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</div>
 
