@@ -1,0 +1,390 @@
+<div>
+	<div ng-show="dataLoading" class="text-center">
+		<div id="loading-overlay" class="ajax-page-loader">
+			<span class="loading-page-indicator col-md-6"> </span>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div ng-show="!dataLoading && !pageError">
+				<div class="pageheader">
+					<h2>{{page.title}}</h2>
+				</div>
+				<!-- Summary Data  -->
+				<div class="row">
+					<div class="col-md-2 col-sm-2 col-xs-6 filter-min-width">
+						<div class="nopadding date-picker-size"
+							ng-init="parent.getResponse()">
+							<date-range-picker ng-model="parent.range" class="m-b-sm"
+								custom-select-options="rangeSelectOptions"
+								callback="parent.getResponse();setDashCache('dashboard.range',parent.range)"></date-range-picker>
+						</div>
+					</div>
+				</div>
+				<br>
+				<div class="right_col" role="main">
+					<!-- top tiles -->
+					<div wse-permission='dashboard_summary'>
+						<div class="tile_count row">
+							<div ng-repeat="d in parent.levels"
+								class="col-md-6 col-lg-3 col-sm-6 col-xs-12 tile_stats_count"
+								ng-class="{'bg-blue-sky': $index ==inx}">
+								<div ng-click="getChart(d.name,$index)" class="handhover">
+									<span class="count_top"><i class="fa {{d.icon}}"></i>
+										{{d.name}}</span>
+									<div class="count" ng-class="{'green':d.inc,'red':!d.inc,}">{{d.data}}</div>
+									<span class="count_bottom"> <span
+										ng-show="d.percentageData!=0"
+										ng-class="{'green':d.inc,'red':!d.inc,}"> <i
+											ng-class="{'fa fa-sort-desc':!d.inc ,'fa fa-sort-up':d.inc}"></i><span>{{d.percentageData
+												|number:2}} %</span>
+									</span><span ng-show="d.percentageData==0.0">{{d.percentageData|
+											number:2}} %</span></span>
+								</div>
+							</div>
+						</div>
+						<!-- /top tiles -->
+						<!-- Charts -->
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="dashboard_graph">
+
+									<div class="row x_title">
+										<div class="col-md-6">
+											<h3>
+												{{chartLabel}} <small></small>
+											</h3>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div class="full-width">
+											<div class="dashbord-chart">
+												<canvas id="line" class="chart chart-line" chart-data="data"
+													style="max-height: 320px;" chart-labels="labels"
+													chart-options="options"
+													chart-dataset-override="datasetOverride"
+													chart-click="onClick">
+											</canvas>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Chart tiles -->
+					<br>
+					<div class="row">
+						<!-- Start to do list -->
+						<div class="col-md-6 col-sm-6 col-xs-12"
+							ng-controller="DashboardLiveCtrl">
+							<div wse-permission='dashboard_widget' class="x_panel"
+								ng-init="autoUpdate(true)">
+								<div class="x_title">
+									<h2>
+										Live<small></small>
+									</h2>
+									<span class="pull-right text-center handhover m-t-sm"
+										ng-click="autoUpdate(true)"><i class="fa fa-refresh"></i></span>
+									<div class="clearfix"></div>
+								</div>
+
+								<div class="x_content">
+									<div class="">
+										<div class="card-container col-lg-6  col-md-12  col-sm-12">
+											<a ui-sref="app.table.list({status:  'LIVE' })"
+												style="text-decoration: none">
+												<div class="card">
+													<div class="front bg-greensea">
+														<div class="text-center">
+															<div class="ajax-page-loader f-xxs"
+																ng-show="isLiveLoading">
+																<span class="loading-page-indicator"> </span>
+															</div>
+															<div ng-show="!isLiveLoading">
+																<p class="text-elg text-strong mb-0" count-up
+																	start-val="oldTotalActTbl" end-val="newTotalActTbl"
+																	decimals="0" duration="2"></p>
+															</div>
+															<span>Total Active Tables</span>
+														</div>
+													</div>
+												</div>
+											</a>
+										</div>
+									</div>
+									<div class="">
+										<div class="card-container col-lg-6  col-md-12  col-sm-12">
+											<a ui-sref="app.coupons.list({status:  'LIVE' })"
+												style="text-decoration: none">
+												<div class="card">
+													<div class="front bg-greensea">
+														<div class="text-center">
+															<div class="ajax-page-loader f-xxs"
+																ng-show="isLiveLoading">
+																<span class="loading-page-indicator"> </span>
+															</div>
+															<div ng-show="!isLiveLoading">
+																<p class="text-elg text-strong mb-0" count-up
+																	start-val="oldTotalLiveCoupon"
+																	end-val="newTotalLiveCoupon" decimals="0" duration="2"></p>
+															</div>
+															<span>Total Live Coupons</span>
+														</div>
+													</div>
+												</div>
+											</a>
+										</div>
+									</div>
+									<div class="">
+										<div class="card-container col-lg-6  col-md-12  col-sm-12">
+											<a ui-sref="app.tournament.list({status:  'LIVE' })"
+												style="text-decoration: none">
+												<div class="card">
+													<div class="front bg-greensea">
+														<div class="text-center">
+															<div class="ajax-page-loader f-xxs"
+																ng-show="isLiveLoading">
+																<span class="loading-page-indicator"> </span>
+															</div>
+															<div ng-show="!isLiveLoading">
+																<p class="text-elg text-strong mb-0" count-up
+																	start-val="oldTotalLiveTournament"
+																	end-val="newTotalLiveTournament" decimals="0"
+																	duration="2"></p>
+															</div>
+															<span>Total Live Tournaments</span>
+														</div>
+													</div>
+												</div>
+											</a>
+										</div>
+									</div>
+									<div class="">
+										<div class="card-container col-lg-6  col-md-12  col-sm-12">
+											<div class="card">
+												<div class="front bg-greensea">
+													<div class="text-center">
+														<div class="ajax-page-loader f-xxs"
+															ng-show="isLiveLoading">
+															<span class="loading-page-indicator"> </span>
+														</div>
+														<div ng-show="!isLiveLoading">
+															<p class="text-elg text-strong mb-0" count-up
+																start-val="oldTotalPlayers" end-val="newTotalPlayers"
+																decimals="0" duration="2"></p>
+														</div>
+														<span>Total Players</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- End to do list -->
+
+						<!-- start of weather widget -->
+						<div wse-permission='dashboard_tournament'
+							class="col-md-6 col-sm-6 col-xs-12">
+							<div class="x_panel" ng-controller="DashboardTournamentCtrl">
+								<div class="x_title">
+									<h2>
+										Tournament<small></small>
+									</h2>
+									<span class="pull-right text-center handhover m-t-sm"
+										ng-click="callServer()"><i class="fa fa-refresh"></i></span>
+									<div class="clearfix"></div>
+								</div>
+								<div class="x_content">
+									<div class="row">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<div class="dashboard_graph">
+												<div class="col-md-12 col-sm-12 col-xs-12"
+													ng-init="callServer()" st-table="displayedCollection"
+													st-safe-src="rowCollection">
+													<table st-safe-src="rowCollection"
+														class="st-table table table-custom">
+														<col width="35%">
+														<col width="35%">
+														<col width="30%">
+														<thead>
+															<tr>
+																<th st-sort="name" class="sorting text-center">Title</th>
+																<th st-sort="collection" class="sorting text-center">Collection</th>
+																<th st-sort="players" class="sorting text-center">Players</th>
+															</tr>
+														</thead>
+														<tbody ng-hide="isLoading">
+															<tr
+																ng-repeat="row in displayedCollection.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
+																<td class="text-center"><a
+																	ui-sref='app.tournament.update({id:row.id})'>{{row.title}}
+																</a></td>
+																<td class="text-center">{{row.collections}}</td>
+																<td class="text-center">{{row.players}}</td>
+															</tr>
+														</tbody>
+														<!-- 	<tbody
+															ng-show="paginationShow && !isLoading && isPagination">
+															<tr class="table-end">
+																<td colspan="12"><div
+																		class="pull-left col-sm-6 col-md-6 col-xs-6">
+																		Showing {{start}} to {{to}} of
+																		<st-summary></st-summary>
+																		Records
+																	</div>
+																	<div class="col-sm-6 col-md-6 col-xs-6">
+																		<div class=" col-md-offset-6">
+																			<ui-select ng-model="showrecords" theme="bootstrap"
+																				on-select="showData($item);dataChange(showrecords);"
+																				style="width:100%;" title="Choose a Type">
+																			<ui-select-match placeholder="Select items per page">{{$select.selected}}
+																			</ui-select-match> <ui-select-choices class="pagination-select"
+																				repeat="type in paginationOption |filter:$select.search ">
+																			{{type}} </ui-select-choices> </ui-select>
+																		</div>
+																	</div></td>
+															</tr>
+														</tbody> -->
+														<tbody ng-show="isLoading">
+															<tr>
+																<td colspan="12" class="text-center"><div
+																		class="loading-indicator"></div></td>
+															</tr>
+														</tbody>
+														<tfoot ng-show="!isLoading && paginationShow">
+															<tr>
+																<td colspan="10" class="text-center"><pagination
+																		total-items="totalItems" ng-model="currentPage"
+																		max-size="maxSize" class="pagination-sm"
+																		boundary-links="true" rotate="false"
+																		num-pages="numPages" items-per-page="itemsPerPage"></pagination>
+																	<!-- <pre>Page: {{currentPage}} / {{numPages}}</pre> --></td>
+															</tr>
+														</tfoot>
+													</table>
+													<div class="row">
+														<br>
+														<div ng-show="isError" colspan="12"
+															style="text-align: center;">{{response.error}}</div>
+													</div>
+												</div>
+												<div class="clearfix"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- end of weather widget -->
+					</div>
+					<!--table data-->
+					<!-- 	<div class="row">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<div class="dashboard_graph">
+								<div class="row x_title">
+									<div class="col-md-6">
+										<h3>
+											Network Activities <small>Graph title sub-title</small>
+										</h3>
+									</div>
+								</div>
+
+								<div class="col-md-12 col-sm-12 col-xs-12"
+									ng-init="callServer()" st-table="displayedCollection"
+									st-safe-src="rowCollection">
+									<table st-safe-src="rowCollection"
+										class="st-table table table-custom">
+										<col width="45%">
+										<col width="45%">
+										<col width="10%">
+										<thead>
+											<tr>
+												<th st-sort="name" class="sorting text-center">Title</th>
+												<th st-sort="createTime" class="sorting text-center">Created</th>
+												<th class=" text-center handhover" ng-click="callServer()"><i
+													class="fa fa-refresh"></i></th>
+											</tr>
+										</thead>
+										<tbody ng-hide="isLoading">
+											<tr ng-repeat="row in displayedCollection">
+												<td class="text-center">{{row.title}}</td>
+												<td st-sort="true" class="text-center">{{row.createTime
+													| date:'medium'}}</td>
+												<td></td>
+											</tr>
+										</tbody>
+										<tbody ng-show="paginationShow && !isLoading && isPagination">
+											<tr class="table-end">
+												<td colspan="8"><div
+														class="pull-left col-sm-8 col-md-8 col-xs-8">
+														Showing {{start}} to {{to}} of
+														<st-summary></st-summary>
+														Records
+													</div>
+													<div class="col-sm-4 col-md-4 col-xs-4">
+														<div class=" col-md-offset-8">
+															<ui-select ng-model="showrecords" theme="bootstrap"
+																on-select="showData($item);dataChange(showrecords);"
+																style="width:100%;" title="Choose a Type"> <ui-select-match
+																placeholder="Select items per page">{{$select.selected}}
+															</ui-select-match> <ui-select-choices class="pagination-select"
+																repeat="type in paginationOption |filter:$select.search ">
+															{{type}} </ui-select-choices> </ui-select>
+														</div>
+													</div></td>
+											</tr>
+										</tbody>
+										<tbody ng-show="isLoading">
+											<tr>
+												<td colspan="12" class="text-center"><div
+														class="loading-indicator"></div></td>
+											</tr>
+										</tbody>
+										<tfoot ng-show="!isLoading">
+											<tr>
+												<td colspan="10" class="text-center">
+													<div st-pagination="" st-items-by-page="showrecords"
+														total-items="filteredItems.length"
+														data-ng-model="currentPage"
+														ng-init="begin = (currentPage-1)*showrecords; end = begin + showrecords"
+														st-displayed-pages="10"
+														st-page-change="pageChanged(newPage)"
+														data-ng-change="begin = (currentPage-1)*showrecords; end = begin + showrecords"></div>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+									<div class="row">
+										<br>
+										<div ng-show="isError" colspan="12"
+											style="text-align: center;">{{response.error}}</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div> -->
+					<!--/table data-->
+				</div>
+			</div>
+		</div>
+		<!-- /top tiles -->
+	</div>
+</div>
+<div class='pagecontent' ng-hide="!pageError">
+	<div class="pageheader">
+		<h2>{{page.title}}</h2>
+	</div>
+	<section class="tile" fullscreen="isFullscreen03">
+		<div class='text-center'>
+			<h1>{{response.error}}</h1>
+			<strong>Please try after some time.</strong>
+		</div>
+	</section>
+</div>
+</div>
