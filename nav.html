@@ -1,0 +1,278 @@
+<div id="sidebar-wrap" ng-controller="NavCtrl">
+	<uib-accordion close-others="oneAtTime"> <uib-accordion-group
+		is-open="status.isFirstOpen"
+		ng-class="{'open': status.isFirstOpen, 'closed': !status.isFirstOpen}">
+	<uib-accordion-heading> Navigation <i
+		class="pull-right fa"
+		ng-class="{'fa-angle-up': status.isFirstOpen, 'fa-angle-down': !status.isFirstOpen}"></i>
+	</uib-accordion-heading>
+	<ul id="navigation" nav-collapse ripple ng-init="getNavProcess()">
+		<li wse-permission='dashboard_tab' ui-sref-active="active"><a
+			ui-sref="app.dashboard.home"> <i class="fa fa-dashboard"
+				name="dashboard"></i><span>{{ 'Dashboard' }}</span></a></li>
+		<li wse-permission='membership_tab' ui-sref-active="active"
+			ng-hide="true"><a ui-sref="app.membership.list"> <i
+				class="fa fa-user" name="membership"></i><span>{{
+					'Memberships' }}</span></a></li>
+		<li wse-permission='poker_tab'
+			ng-class="{active: $state.includes('app.table') || $state.includes('app.tableConfiguration') || $state.includes('app.tournament') ||$state.includes('app.tournamentConfiguration')|| $state.includes('app.poker.poker_master_config')}"><a
+			ui-sref="app.poker"> <i class="fa fa-gamepad" name="fighter-jet"></i><span>{{
+					'Poker' }}</span></a>
+			<ul>
+				<li wse-permission='poker_tables_tab'
+					ng-class="{active: $state.includes('app.table')}"><a
+					ui-sref="app.table.list({poker: 'tables' })"><fa
+							name="caret-right"></fa>Tables</a></li>
+				<li wse-permission='poker_tables_configuration_tab'
+					ng-class="{active: $state.includes('app.tableConfiguration')}"><a
+					ui-sref="app.tableConfiguration.list({poker: 'table-configuration' })"><fa
+							name="caret-right"></fa>Table Configurations</a></li>
+				<li wse-permission='poker_tournaments_tab'
+					ng-class="{active: $state.includes('app.tournament')}"><a
+					ui-sref="app.tournament.list({poker: 'tournaments' })"><fa
+							name="caret-right"></fa>Tournaments</a></li>
+				<li wse-permission='tournaments_configuration_tab'
+					ng-class="{active: $state.includes('app.tournamentConfiguration')}"><a
+					ui-sref="app.tournamentConfiguration.list({poker: 'tournaments-configuration' })"><fa
+							name="caret-right"></fa>Tournament Configurations</a></li>
+				<li wse-permission='poker_master_configuration_tab'
+					ui-sref-active="active"
+					ng-class="{active: $state.includes('app.poker.poker_master_config')}"><a
+					ui-sref="app.poker.poker_master_config"><fa name="caret-right"></fa>
+						Master Poker Configuration</a></li>
+			</ul></li>
+			
+		<li wse-permission='cricket_tab' ui-sref-active="active"><a
+			ui-sref="app.cricket"><i class="fa fa-trophy" aria-hidden="true"></i>
+				<span>{{'Cricket'}}</span></a> 
+			<ul> 
+				<li wse-permission='cricket_contest_list_tab'
+					ng-class="{active: $state.includes('app.cricketContest')}"><a
+					ui-sref="app.cricketContest.list"><fa name="caret-right"></fa>Contests
+				</a></li>  
+				<li wse-permission='cricket_batting_list_tab' 
+					ng-class="{active: $state.includes('app.cricketBatting')}"><a
+					ui-sref="app.cricketBatting.list"><fa name="caret-right"></fa>Batting points
+				</a></li> 
+				<li wse-permission='cricket_bowling_list_tab' 
+					ng-class="{active: $state.includes('app.cricketBowling')}"><a
+					ui-sref="app.cricketBowling.list"><fa name="caret-right"></fa>Bowling Points
+				</a></li> 
+				<li wse-permission='cricket_fielding_list_tab' 
+					ng-class="{active: $state.includes('app.cricketFielding')}"><a
+					ui-sref="app.cricketFielding.list"><fa name="caret-right"></fa>Fielding Points
+				</a></li> 
+				<!-- <li wse-permission='cricket_batting_info' 
+					ng-class="{active: $state.includes('app.battings.list')}"><a
+					ui-sref="app.battings.list"><fa name="caret-right"></fa>Battings
+				</a></li>  -->
+			</ul></li> 
+			<!-- <li wse-permission='payment_tab' ui-sref-active="active"><a
+			ui-sref="app.payment"> <i class="fa fa-credit-card"></i><span>{{'Payment'
+					}}</span></a>
+			<ul>
+				<li wse-permission='payment_list_tab'
+					ng-class="{active: $state.includes('app.payment.list')}"><a
+					ui-sref="app.payment.list"> <fa name="caret-right"></fa>Payment
+						List
+				</a></li>
+			</ul></li> -->
+		<li wse-permission='promotions_tab' 
+			ng-class="{active: $state.includes('app.coupons')}"><a
+			ui-sref="app.promotions"> <i class="fa fa-arrows"
+				name="fighter-jet"></i><span>{{ 'Promotions' }}</span></a>
+			<ul>
+				<li wse-permission='promotion_coupon_tab'
+					ng-class="{active: $state.includes('app.coupons')}"><a
+					ui-sref="app.coupons.list"><fa name="caret-right"></fa>Coupons</a></li>
+				<li wse-permission=promotion_others_tab
+					ng-class="{active: $state.includes('app.othersPromotions')}"><a
+					ui-sref="app.othersPromotions.list"><fa name="caret-right"></fa>Others</a></li>
+			</ul></li> 
+		<li wse-permission='player_tab' ui-sref-active="active"><a
+			ui-sref="app.players"> <i class="fa fa-fighter-jet"
+				name="fighter-jet"></i><span>{{ 'Player' }}</span></a>
+			<ul>
+				<li wse-permission='players_tab'
+					ng-class="{active: $state.includes('app.players')}"><a
+					ui-sref="app.players.list"><fa name="caret-right"></fa>Players</a></li>
+				<li wse-permission='category_tab'
+					ng-class="{active: $state.includes('app.category')}"><a
+					ui-sref="app.category.list"><fa name="caret-right"></fa>Categories</a></li>
+				<li wse-permission='category_tab'
+					ng-class="{active: $state.includes('app.chipconversion')}"><a
+					ui-sref="app.chipconversion.list"><fa name="caret-right"></fa>Chip
+						Conversion</a></li>
+
+				<li wse-permission='category_tab'
+					ng-class="{active: $state.includes('app.loginValidate')}"><a
+					ui-sref="app.loginValidate.list"><fa name="caret-right"></fa>Configuration
+						Settings</a></li>
+				<li wse-permission='category_tab'
+					ng-class="{active: $state.includes('app.utilities')}"><a
+					ui-sref="app.utilities.list"><fa name="caret-right"></fa>Game
+						History</a></li>
+				<li wse-permission='category_tab'
+					ng-class="{active: $state.includes('app.leaderboard')}"><a
+					ui-sref="app.leaderboard.list"><fa name="caret-right"></fa>LeaderBoard</a></li>
+				<li wse-permission='category_tab'
+					ng-class="{active: $state.includes('app.playerAchievement')}"><a
+					ui-sref="app.playerAchievement.list"><fa name="caret-right"></fa>Player
+						Achievement</a></li>
+			</ul></li>
+		<li wse-permission='withdraw_tab'
+			ng-class="{active: $state.includes('app.withdraw')}"><a
+			ui-sref="app.withdraw.list"> <i class="fa fa-clipboard"
+				name="admin"></i><span>{{ 'Withdraw' }}</span></a></li>
+		<!--     <li wse-permission='affiliates_tab'
+            ng-class="{active: $state.includes('app.affiliates')}"><a
+            ui-sref="app.affiliates.affiliate_list"> <i class="fa fa-sign-in"
+                name="admin"></i><span>{{ 'Affiliate' }}</span></a></li> -->
+		<li wse-permission='affiliate_tab'
+			ng-class="{active: $state.includes('app.affiliates')}"><a
+			ui-sref="app.affiliates"> <i class="fa fa-sign-in" name="admin"></i><span>{{
+					'Affiliate'}}</span></a>
+			<ul>
+				<li wse-permission='affiliates_tab'
+					ng-class="{active: $state.includes('app.affiliates.affiliate_list')||$state.includes('app.affiliates.affiliate_create')||$state.includes('app.affiliates.affiliate_update')}"><a
+					ui-sref="app.affiliates.affiliate_list"><fa name="caret-right"></fa>Affiliates</a></li>
+				<li wse-permission='affiliates_referral_code_tab'
+					ng-class="{active: $state.includes('app.affiliates.referral_list')|| $state.includes('app.affiliates.referral_create')}"><a
+					ui-sref="app.affiliates.referral_list"><fa name="caret-right"></fa>Referral
+						Codes</a></li>
+			</ul></li>
+			<li wse-permission='reports_tab'
+			ng-class="{active: $state.includes('app.report')}"><a
+			ui-sref="app.report"> <i class="fa fa-sign-in" name="admin"></i><span>{{
+					'Report'}}</span></a>
+			<ul>
+				<li wse-permission='reports_tab'
+					ng-class="{active: $state.includes('app.report')}"><a
+					ui-sref="app.report.list"><fa name="caret-right"></fa>Report</a></li>
+				<li wse-permission='report_record_tab'
+					ng-class="{active: $state.includes('app.record.report')}"><a
+					ui-sref="app.recordList"><fa name="caret-right"></fa>Player Record
+						</a></li>
+			</ul></li>
+		<li wse-permission="system_admin_tab"
+			ng-class="{active: $state.includes('app.department') || $state.includes('app.admin')}"
+			style="cursor: pointer;"><a ui-sref="app.account"><i
+				class="fa fa-users" name="bar-chart-o"></i> <span>{{ 'System
+					Admin' }}</span></a>
+			<ul>
+				<li wse-permission="system_admin_department_tab"
+					ng-class="{active: $state.includes('app.department')}"><a
+					ui-sref="app.department.list"><fa name="caret-right"></fa>Departments</a></li>
+				<li wse-permission="system_admin_users_tab"
+					ng-class="{active: $state.includes('app.admin')}"><a
+					ui-sref="app.admin.list"><fa name="caret-right"></fa>Users</a></li>
+			</ul></li>
+		<li wse-permission='permissions_tab'
+			ng-class="{active: $state.includes('app.role') || $state.includes('app.permissions')}"><a
+			ui-sref="app.permissions"><i class="fa fa-lock"
+				name="bar-chart-o"></i><span>{{'Permission'}}</span></a>
+			<ul>
+				<li wse-permission='permissions_role_tab'
+					ng-class="{active: $state.includes('app.role')}"><a
+					ui-sref="app.role.list"><fa name="caret-right"></fa>Roles</a></li>
+				<li wse-permission='permissions_permission_tab'
+					ng-class="{active: $state.includes('app.permissions')}"><a
+					ui-sref="app.permissions.list"><fa name="caret-right"></fa>Permissions</a></li>
+			</ul></li>
+		<li wse-permission='image_types_tab'
+			ng-class="{active: $state.includes('app.type') || $state.includes('app.images')}"><a
+			ui-sref="app.type"><i class="fa fa-lock" name="bar-chart-o"></i><span>{{'Images'}}</span></a>
+			<ul>
+				<li wse-permission='image_type_tab'
+					ng-class="{active: $state.includes('app.type')}"><a
+					ui-sref="app.type.list"><fa name="caret-right"></fa>Type</a></li>
+				<li wse-permission='image_tab'
+					ng-class="{active: $state.includes('app.images')}"><a
+					ui-sref="app.images.list"><fa name="caret-right"></fa>Image</a></li>
+			</ul></li>
+		<li wse-permission='elearning_tab'
+			ng-class="{active: $state.includes('app.elearning')||$state.includes('app.question')||$state.includes('app.quiz')}"><a
+			ui-sref="app.elearning"><i class="fa fa-book" aria-hidden="true"></i><span>{{'E-Learning'}}</span></a>
+			<ul>
+				<li wse-permission='elearning_dashboard_tab'
+					ng-class="{active: $state.includes('app.elearning')}"><a
+					ui-sref="app.elearning.dashboard"><fa name="caret-right"></fa>Dashboard</a></li>
+				<li wse-permission='elearning_questions_tab'
+					ng-class="{active: $state.includes('app.question')}"><a
+					ui-sref="app.question.list"><fa name="caret-right"></fa>Questions</a></li>
+				<li wse-permission='elearning_quiz_tab'
+					ng-class="{active: $state.includes('app.quiz')}"><a
+					ui-sref="app.quiz.list"><fa name="caret-right"></fa>Quiz</a></li>
+				<!-- <li wse-permission='elearning_quiz_tab'
+                    ng-class="{active: $state.includes('app.poll')}"><a
+                    ui-sref="app.poll.list"><fa name="caret-right"></fa>Poll</a></li> -->
+				<li wse-permission='elearning_quiz_tab'
+					ng-class="{active: $state.includes('app.price')}"><a
+					ui-sref="app.price.list"><fa name="caret-right"></fa>Price</a></li>
+				<li wse-permission='elearning_questions_tab'
+					ng-class="{active: $state.includes('app.vote')}"><a
+					ui-sref="app.vote.list"><fa name="caret-right"></fa>Poll</a></li>
+			</ul></li>
+		<li wse-permission='blog_tab'
+			ng-class="{active: $state.includes('app.homeblog')||$state.includes('app.blog')||$state.includes('app.topic')}"><a
+			ui-sref="app.blogs"> <i class="fa fa-newspaper-o"></i><span>{{'Blog'
+					}}</span></a>
+			<ul>
+				<li wse-permission='topics_tab'
+					ng-class="{active: $state.includes('app.topic')}"><a
+					ui-sref="app.topic.list"> <fa name="caret-right"></fa>Topics
+				</a></li>
+				<li wse-permission='blogs_tab'
+					ng-class="{active: $state.includes('app.blog')}"><a
+					ui-sref="app.blog.list"><fa name="caret-right"></fa>Blogs</a></li>
+				<li wse-permission='blogs_tab'
+					ng-class="{active: $state.includes('app.forum')}"><a
+					ui-sref="app.forum.list"><fa name="caret-right"></fa>Forum List</a></li>
+				<li wse-permission='testimonial_tab'
+					ng-class="{active: $state.includes('app.testimonial')}"><a
+					ui-sref="app.testimonial.list"><fa name="caret-right"></fa>Testimonials</a></li>
+				<li wse-permission='home_links_tab'
+					ng-class="{active: $state.includes('app.homeblog')}"><a
+					ui-sref="app.homeblog.list"><fa name="caret-right"></fa>Home
+						Links</a></li>
+			</ul></li>
+		<li wse-permission='payment_tab' ui-sref-active="active"><a
+			ui-sref="app.payment"> <i class="fa fa-credit-card"></i><span>{{'Payment'
+					}}</span></a>
+			<ul>
+				<li wse-permission='payment_list_tab'
+					ng-class="{active: $state.includes('app.payment.list')}"><a
+					ui-sref="app.payment.list"> <fa name="caret-right"></fa>Payment
+						List
+				</a></li>
+			</ul></li>
+		<li wse-permission=IPRestriction_tab ui-sref-active="active"><a
+			ui-sref="app.ipRestriction"> <i class="fa fa-ban"></i><span>{{'IPRestriction'
+					}}</span></a>
+			<ul>
+				<li wse-permission='restricted_state_list_tab'
+					ng-class="{active: $state.includes('app.ipRestriction.list')}"><a
+					ui-sref="app.ipRestriction.list"> <fa name="caret-right"></fa>Restrictred
+						IP List
+				</a></li>
+			</ul></li>
+		<li wse-permission='settings_tab' ui-sref-active="active"><a
+			ui-sref="app.Settings"><i class="fa fa-cogs" name="bar-chart-o"></i><span>{{'Settings'}}</span></a>
+			<ul>
+				<li wse-permission='settings_reset_password'
+					ng-class="{active: $state.includes('app.settings.user')}"><a
+					ui-sref="app.settings.user"><fa name="caret-right"></fa>Change
+						Password</a></li>
+			</ul></li>
+		<li wse-permission='marketings_tab' ui-sref-active="active"><a
+			ui-sref="app.Marketings"><i class="fa fa-line-chart"
+				aria-hidden="true"></i><span>{{'Marketings'}}</span></a>
+			<ul>
+				<li wse-permission='marketings_send_message'
+					ng-class="{active: $state.includes('app.marketings.list')}"><a
+					ui-sref="app.marketings.list"><fa name="caret-right"></fa>Marketings
+						Update</a></li>
+			</ul></li>
+	</ul>
+</div>
+
