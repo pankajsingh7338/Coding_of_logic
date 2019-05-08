@@ -1,0 +1,155 @@
+<div ng-init="callServer()"> 
+	<div ng-show="dataLoading" class="text-center"> 
+		<div id="loading-overlay" class="ajax-page-loader"> 
+			<span class="loading-page-indicator col-md-6"> </span> 
+		</div> 
+	</div> 
+	<div ng-show="!dataLoading"> 
+		<div class="pageheader"> 
+			<h2>{{page.title}}</h2> 
+		</div> 
+		<div class="pagecontent" ng-hide="pageError"> 
+			<div class="row" st-table="displayedCollection"
+				st-safe-src="rowCollection"> 
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"> 
+					<input ng-model="search.query" name="query" type="text"
+						no-special-char ng-change="filterCallServer()"
+						placeholder="Search Scoring points" class="form-control"> 
+					<br class="hidden-sm hidden-md hidden-lg"> 
+				</div> 
+				<div class="col-lg-2 col-md-3 col-sm-6 col-xs-12"> 
+					<div class=""> 
+						<ui-select ng-model="cricketForm.status" theme="bootstrap"
+							ng-change="filterCallServer()" style="width:100%;"
+							title="Select status"> <ui-select-match
+							placeholder="Select status">{{$select.selected.name}}
+						</ui-select-match> <ui-select-choices
+							repeat="status in cricForm.statuses |filter:$select.search "> 
+						{{status.name}} </ui-select-choices> </ui-select> 
+					</div> 
+					<br class="hidden-md hidden-lg"> 
+				</div> 
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 text-right">
+					<div wse-permission='cricket_batting_create'>
+						<a class="btn btn-default" ui-sref="app.cricketBatting.create">
+							<span class="ng-scope">Create Scoring Points</span> 
+						</a> 
+					</div> 
+				</div> 
+				<div class="col-xs-12 list-page-content">
+					<section class="tile" fullscreen="isFullscreen03">
+						<div class="tile-body">
+							<table st-safe-src="rowCollection"
+								class="st-table table table-custom">
+								<col width="20%"> 
+								<col width="19%"> 
+								<col width="18%"> 
+								<col width="17%"> 
+								<col width="19%"> 
+								<col width="18%"> 
+								<col width="17%"> 
+								<col width="21%"> 
+								<col width="15%"> 
+								<col width="16%"> 
+								<col width="15%"> 
+								<thead>
+									<tr>
+										<th st-sort="title" class="sorting text-center">Title</th>
+										<th st-sort="category" class="sorting text-center">Category</th>
+										<th st-sort="entity" class="sorting text-center">Entity</th>
+										<th st-sort="api" class="sorting text-center">API Value</th>
+										<th st-sort="manual" class="sorting text-center">Manual Value</th>
+										<th st-sort="player" class="sorting text-center">Player Pints</th>
+										<th st-sort="user" class="sorting text-center">User Points</th>
+										<th st-sort="status" class="sorting text-center">Status</th>
+										<th st-sort="created" class="sorting text-center">Created</th>
+										<th wse-permission='cricket_batting_delete_tab' class="text-center">Action</th>
+										<th class=" text-center handhover" ng-click="callServer()"><i
+											class="fa fa-refresh"></i></th> 
+									</tr> 
+								</thead> 
+								<tbody ng-hide="isLoading">
+									<tr ng-repeat="row in displayedCollection | filter: {title:search.query}"> 
+										<td class="text-center"><a
+											ui-sref='app.cricketBatting.update({id:row.id})'>{{row.title}}</a></td>
+										<td class="text-center">{{row.category}}</td>
+										<td class="text-center">{{row.entity}}</td>
+										<td class="text-center">{{row.manualValue}}</td>
+										<td class="text-center">{{row.apiValue}}</td> 
+										<td class="text-center">{{row.playerPoints}}</td>
+										<td class="text-center">{{row.userPoints}}</td>       
+										<td class="text-center">{{row.status}}</td> 
+										<td class="text-center">{{row.createTime |
+											date:'medium'}}</td> 
+										<td wse-permission='cricket_batting_delete_tab' ng-show ="row.status == 'DRAFT'" 
+											class="text-center"><a ng-controller="modelCtrl" 
+											ng-click="openDeletePointScore(row.id,row.title)" data-nodrag=""
+											class="btn btn-danger btn-xs"><span class="fa fa-trash"></span></a></td>
+									</tr> 
+								</tbody> 
+								<tbody ng-show="paginationShow && !isLoading && isPagination">
+									<tr class="table-end">
+										<td colspan="8"><div
+												class="pull-left col-sm-8 col-md-8 col-xs-8">
+												Showing {{start}} to {{to}} of
+												<st-summary></st-summary>
+												Records
+											</div>
+											<div class="col-sm-4 col-md-4 col-xs-4">
+												<div class=" col-md-offset-8">
+													<ui-select ng-model="showrecords" theme="bootstrap"
+														on-select="showData($item);dataChange(showrecords);"
+														style="width:100%;" title="Choose a Type"> <ui-select-match
+														placeholder="Select items per page">{{$select.selected}}
+													</ui-select-match> <ui-select-choices class="pagination-select"
+														repeat="type in paginationOption |filter:$select.search ">
+													{{type}} </ui-select-choices> </ui-select>
+												</div>
+											</div></td>
+									</tr>
+								</tbody>
+								<tbody ng-show="isLoading">
+									<tr>
+										<td colspan="12" class="text-center"><div
+												class="loading-indicator"></div></td>
+									</tr>
+								</tbody>
+								<tfoot ng-show="!isLoading">
+									<tr>
+										<td colspan="10" class="text-center">
+											<div st-pagination="" st-items-by-page="showrecords"
+												total-items="filteredItems.length"
+												data-ng-model="currentPage"
+												ng-init="begin = (currentPage-1)*showrecords; end = begin + showrecords"
+												st-displayed-pages="10"
+												st-page-change="pageChanged(newPage)"
+												data-ng-change="begin = (currentPage-1)*showrecords; end = begin + showrecords"></div>
+										</td>
+									</tr>
+								</tfoot>
+							</table>
+							<div class="row">
+								<br>
+								<div ng-show="isError" colspan="12" style="text-align: center;">
+									{{response.error}}</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+		<div class='pagecontent' ng-hide="!pageError">
+			<section class="tile" fullscreen="isFullscreen03">
+				<div class='text-center'> 
+					<i class="fa fa-exclamation-triangle fa-4x m-t-sm"></i>
+					<h2 class="m-t-z">{{response.error}}</h2> 
+					<div class="p-b-xs">
+						<a ui-sref="app.dashboard.home">Go To Home</a>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</div>
+
+

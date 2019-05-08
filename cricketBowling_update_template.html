@@ -1,0 +1,113 @@
+<div class="row" ng-init="getCategory()">
+	<div class="col-md-12" ng-hide="pageError">
+		<section fullscreen="isFullscreen02" class="tile">
+			<!-- tile header -->
+			<div class="tile-header dvd dvd-btm">
+				<h1 class="custom-font">
+					<strong>Update </strong> Category
+				</h1>
+			</div>
+			<!-- tile body -->
+			<div class="tile-body">
+				<form name="myForm" method="get" ng-submit="updateCategory()"
+					novalidate> 
+					<div class="row"> 
+						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"> 
+							<div class="form-group"> 
+								<label>Category Name *</label> <input
+									ng-model="categoryCricketForm.title" ng-change="emptyField()"
+									name="categoryName" type="text"
+									placeholder="Enter category name" required class="form-control">
+								<span style="color: red"
+									ng-show="myForm.title.$dirty && myForm.title.$invalid">
+									<span ng-show="myForm.title.$error.required">Category
+										Name is required.</span> 
+								</span> 
+							</div> 
+							<br class=" hidden-md hidden-lg"> 
+						</div> 
+					</div> 
+					<br> <br>
+					<div class="row">
+						<div class="col-lg-3 col-md-3 col-sm-6 ">
+							<button class="btn btn-w-m btn-primary min-btn-width"
+								type="button" ng-click="addEntity()">Add</button>
+						</div>
+					</div>
+					<br> <br>
+					<div ng-repeat="data in entity">
+						<div class="row">
+							<div class="col-sm-3 col-lg-4">
+								<label>Entity *</label> <input ng-model="data.entity"
+									ng-change="emptyField()" name="entity" type="text"
+									placeholder="Enter Entity Name" required class="form-control">
+								<span class="alert-color"
+									ng-show="myForm.values.$dirty && myForm.values.$invalid">
+									<span ng-show="myForm.values.$error.required">Entity is
+										required.</span>
+								</span>
+							</div>
+							<div class="col-sm-2 ">
+								<div class="col-lg-3 col-md-3 col-sm-6">
+									<button class="btn btn-w-m btn-danger" type="button"
+										ng-click="removeEntity($index)">Remove</button>
+								</div>
+							</div>
+						</div>
+						<br>
+					</div>
+					<div class="row" ng-show="!hideAddEntity">
+						<div class="col-sm-3 col-lg-4">
+							<label>Entity *</label> <input
+								ng-model="categoryCricketForm.entity" ng-change="emptyField()"
+								name="entity" type="text" placeholder="Enter Entity Name"
+								required class="form-control"> <span class="alert-color"
+								ng-show="myForm.values.$dirty && myForm.values.$invalid">
+								<span ng-show="myForm.values.$error.required">Entity is
+									required.</span>
+							</span>
+						</div>
+					</div> 
+					<div ng-show="isEntError">
+						<code class="ng-binding">{{entError}}</code>
+					</div>
+					<br>
+					<hr class="line-dashed line-full" />
+					<div ng-show="isSuccess">
+						<code class="alert alert-success ng-binding">{{successMessage}}</code>
+						<hr class="line-dashed line-full" />
+					</div>
+					<div ng-show="isError">
+						<code class="alert alert-fail ng-binding">{{errorMessage}}</code>
+						<hr class="line-dashed line-full" />
+					</div>
+					<div ng-show="isBlank"> 
+						<div class="row"> 
+							<div
+								class="m-l-md col-lg-4 col-md-5 col-sm-6 col-xs-12 alert-msg alert-danger">{{blankMsg}}</div> 
+						</div> 
+						<hr class="line-dashed line-full" /> 
+					</div> 
+					<div class="form-group"> 
+						<a ui-sref="app.cricketBowling.list"><button
+								class=" btn btn-rounded btn-default btn-sm" type="submit">Back</button></a>
+						<button class=" btn btn-rounded btn-success btn-sm" type="submit">Update</button>
+					</div>
+					<br>
+				</form> 
+			</div>
+		</section> 
+	</div> 
+	<div class='pagecontent' ng-hide="!pageError">
+		<div class="pageheader">
+			<h2>{{page.title}}</h2>
+		</div>
+		<section class="tile" fullscreen="isFullscreen03">
+			<div class='text-center'>
+				<h1>{{responseError}}</h1>
+				<strong>Please try after some time.</strong>
+			</div>
+		</section>
+	</div>
+</div>
+
