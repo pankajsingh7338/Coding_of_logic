@@ -1,0 +1,19 @@
+package com.actolap.wsegame.config;
+
+public class Config {
+
+	public static String FROM_EMAIL = "noreply@wsegame.com";
+	public static String EMAIL_API_KEY = "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";
+	public static boolean dev = true;
+	public static String version = "1";
+	public static String domain = "localhost:8080/wse-back-office-fe";
+	public static String lyveAffiliateDomain = "localhost:8080/lyve-fe-affiliate";
+	public static String apiBaseUrl = "http://dev.api.wsegames.in/1";
+	public static String cricketApiBaseUrl = "http://localhost:4001/1"; 
+	public static String AWS_KEY = "AKIAJ5R4R2GBSQWI7IAA";
+	public static String AWS_SECRET = "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";
+	public static String AWS_BUCKET = "lyve-assets-dev";
+	public static String IMAGE_PATH = "/resources";
+
+}
+

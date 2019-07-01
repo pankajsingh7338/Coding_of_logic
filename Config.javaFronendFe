@@ -1,0 +1,45 @@
+package com.actolap.lyve.fe.config;
+
+public class Config {
+
+	public static String EMAIL_API_KEY = "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";
+	public static String domain = "localhost:8080/lyve-fe";
+	public static String apiBaseUrl = "http://dev.api.wsegames.in/1";
+	public static String socketUrl = "ws://139.59.56.204:9090/lyve/ws";
+	public static boolean dev = true;
+	public static String version = "1";
+	public static String IMAGE_PATH = "/resources/lyve";
+	public static String AWS_KEY = "AKIAJ5R4R2GBSQWI7IAA";
+	public static String AWS_SECRET = "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";
+	public static String AWS_BUCKET = "lyve-assets-dev";
+	// Facebook integration
+	// public static String FB_APP_ID = "1902655220011030";
+	// public static String FB_APP_SECRET = "88cd6092315632c50ba720425522537e";
+	public static String FB_APP_ID = "286195638596060";
+	public static String FB_APP_SECRET = "1b4940addfd7ba212ce877f3255a5e23";  
+	public static String FB_REDIRECT_URI = "https://" + Config.domain + "/fbhome";
+	 
+	public static String FB_API = "https://graph.facebook.com/me";
+	public static String FACEBOOK = "facebook";
+	// Google integrattion
+	public static String GOOGLE_APP_ID = "512684900543-3igjmr2u5mk2371rcgntlb3p5q1ghqjf.apps.googleusercontent.com";
+	public static String GOOGLE_APP_SECRET = "Ez38wNODCjcgqpkvTvYT9BxO";
+	// public static String GOOGLE_REDIRECT_URI = "http://" + Config.domain +
+	// "/googlehome";
+	public static String GOOGLE_API = "https://www.googleapis.com/oauth2/v1/userinfo";
+	public static String GOOGLE = "google";
+	public static String PAYMENT_TYPE = "test"; 
+	
+	//css and js version
+	
+	public static String cssAndJsVersion = "1";
+
+	public static String PROTOCOL = "http";
+	public static String GOOGLE_CAPTCH_SITE_KEY = "6LfiMkEUAAAAAFDSqMMy48UXAMz6NxJrHdkT4cFF";
+	public static String GOOGLE_CAPTCHA_API_URL = "https://www.google.com/recaptcha/api/siteverify";
+	public static String GOOGLE_CAPTCHA_SECRET = "6LfiMkEUAAAAAN37Ak8_kNK9ZApYJuBbtWiVo2DI";
+	
+	// White listed urls
+	public static String[] whiteListedUrls= {"/access/denied"};
+}
+
