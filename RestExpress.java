@@ -80,7 +80,7 @@ public class RestExpress {
 			"RestExpress", GlobalEventExecutor.INSTANCE);
 
 	public static final String DEFAULT_NAME = "RestExpress";
-	public static final int DEFAULT_PORT = 8080;
+	public static final int DEFAULT_PORT = 8081;
 
 	private static SerializationProvider DEFAULT_SERIALIZATION_PROVIDER = null;
 
@@ -88,17 +88,17 @@ public class RestExpress {
 	private ServerSettings serverSettings = new ServerSettings();
 	private RouteDefaults routeDefaults = new RouteDefaults();
 	private boolean enforceHttpSpec = false;
-	private boolean useSystemOut; 
-	private ServerBootstrapFactory bootstrapFactory = new ServerBootstrapFactory(); 
+	private boolean useSystemOut;
+	private ServerBootstrapFactory bootstrapFactory = new ServerBootstrapFactory();
 
-	private List<MessageObserver> messageObservers = new ArrayList<MessageObserver>(); 
+	private List<MessageObserver> messageObservers = new ArrayList<MessageObserver>();
 	private List<Preprocessor> preprocessors = new ArrayList<Preprocessor>();
 	private List<Postprocessor> postprocessors = new ArrayList<Postprocessor>();
 	private List<Postprocessor> finallyProcessors = new ArrayList<Postprocessor>();
 	private ExceptionMapping exceptionMap = new DefaultExceptionMapper();
 	private List<Plugin> plugins = new ArrayList<Plugin>();
 	private RouteDeclaration routeDeclarations = new RouteDeclaration();
-	private SSLContext sslContext = null; 
+	private SSLContext sslContext = null;
 	private SerializationProvider serializationProvider = null;
 	private SecuirtyHandler secuirtyHandler;
 
